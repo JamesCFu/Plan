@@ -1,15 +1,33 @@
 import React, { useState } from 'react';
 import { Calendar, Clock, CheckCircle2, BookOpen, Calculator, GraduationCap, Coffee, AlertCircle } from 'lucide-react';
 
-const App = () => {
-  const [completedTasks, setCompletedTasks] = useState({});
+// Define the shape of a Task for TypeScript
+interface Task {
+  time: string;
+  duration: string;
+  title: string;
+  type: string;
+  desc: string;
+}
 
-  const toggleTask = (day, time) => {
+// Define the shape of a Schedule Day
+interface ScheduleDay {
+  day: string;
+  goal: string;
+  tasks: Task[];
+}
+
+const App = () => {
+  // FIX 1: Tell React this state uses string keys (e.g. "0-1") and boolean values
+  const [completedTasks, setCompletedTasks] = useState<Record<string, boolean>>({});
+
+  // FIX 2: Add 'number' types to the arguments
+  const toggleTask = (day: number, time: number) => {
     const key = `${day}-${time}`;
     setCompletedTasks(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
-  const schedule = [
+  const schedule: ScheduleDay[] = [
     {
       day: "Monday (OFF - Heavy Lifting)",
       goal: "Master Tuesday's midterms + High-Volume AMC 8 Math.",
@@ -64,7 +82,8 @@ const App = () => {
     }
   ];
 
-  const getTypeStyle = (type) => {
+  // FIX 3: Add 'string' type to the argument
+  const getTypeStyle = (type: string) => {
     switch (type) {
       case 'amc': return 'bg-emerald-50 border-emerald-200 text-emerald-700';
       case 'midterm': return 'bg-blue-50 border-blue-200 text-blue-700';
@@ -73,7 +92,8 @@ const App = () => {
     }
   };
 
-  const getIcon = (type) => {
+  // FIX 4: Add 'string' type to the argument
+  const getIcon = (type: string) => {
     switch (type) {
       case 'amc': return <Calculator className="w-4 h-4" />;
       case 'midterm': return <BookOpen className="w-4 h-4" />;
